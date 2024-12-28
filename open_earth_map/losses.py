@@ -162,3 +162,23 @@ class OHEMBCELoss(nn.Module):
             )[: self.min_kept]
             kept_flag.contiguous().view(-1)[hardest_examples] = True
         return self.criterion(input[kept_flag, 0], target[kept_flag, 0])
+
+
+class MultiLoss(nn.Module):
+    def __init__(self, weights={'jaccard': 1.0, 'dice': 1.0, 'focal': 1.0}):
+        super(MultiLoss, self).__init__()
+        self.jaccard_loss = JaccardLoss()
+        self.dice_loss = DiceLoss()
+        self.focal_loss = FocalLoss()
+        self.weights = weights
+
+    def forward(self, input, target):
+        jaccard = self.jaccard_loss(input, target)
+        dice = self.dice_loss(input, target)
+        focal = self.focal_loss(input, target)
+
+        return (
+            self.weights['jaccard'] * jaccard
+            + self.weights['dice'] * dice
+            + self.weights['focal'] * focal
+        )

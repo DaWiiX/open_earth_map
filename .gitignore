@@ -6,6 +6,8 @@ __pycache__/
 # C extensions
 *.so
 
+workdir/
+
 # Distribution / packaging
 .Python
 OpenEarthMap_Mini/

@@ -124,3 +124,10 @@ class UNetUpBlock(nn.Module):
         out = self.conv_block(out)
 
         return out
+
+
+if __name__ == '__main__':
+    x = torch.randn(1, 3, 512, 512)
+    model = UNet()
+    y = model(x)
+    print(y.shape)
